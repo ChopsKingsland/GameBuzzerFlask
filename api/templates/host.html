@@ -1,0 +1,50 @@
+<!-- templates/host.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Host View</title>
+    <style>
+        /* make it look modern */
+        body {
+            font-family: sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <h1>Host View</h1>
+    <button type="button" onclick="clearList()">Clear List</button>
+
+    <p>Buzzed Participants:</p>
+    <ol id="buzzedParticipants"></ol>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
+    <script>
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        socket.on('buzzed', function(data) {
+            var buzzedParticipantsList = document.getElementById('buzzedParticipants');
+            // buzzedParticipantsList.innerHTML = '';
+
+            var li = document.createElement('li');
+            li.appendChild(document.createTextNode(data.name));
+
+            if (buzzedParticipantsList.childElementCount === 0) {
+                // set colour of text in li to read
+                li.style.color = 'red';
+            }
+            
+            buzzedParticipantsList.appendChild(li);
+
+
+        });
+
+        function clearList() {
+            var buzzedParticipantsList = document.getElementById('buzzedParticipants');
+            buzzedParticipantsList.innerHTML = '';
+            // socket.emit('clear');
+        }
+    </script>
+</body>
+</html>
